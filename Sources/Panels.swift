@@ -10,6 +10,7 @@ public class Panels {
     public var isExpanded: Bool {
         return (panelHeightConstraint?.constant ?? 0.0) > configuration.visibleArea()
     }
+    public var isKeyboardOrserverEnabled: Bool = true
 
     private weak var panel: (Panelable & UIViewController)?
     private weak var parentViewController: UIViewController?
@@ -147,18 +148,22 @@ extension Panels {
     }
 
     @objc private func keyboardWillShow(notification: Notification) {
-        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            let keyboardHeight = CGFloat(keyboardRectangle.height)
-            containerView.then {
-                let currentValue = (isExpanded) ? configuration.size(for: $0) : configuration.visibleArea()
-                movePanel(value: currentValue + keyboardHeight, keyboard: true)
+        if isKeyboardOrserverEnabled {
+            if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                let keyboardRectangle = keyboardFrame.cgRectValue
+                let keyboardHeight = CGFloat(keyboardRectangle.height)
+                containerView.then {
+                    let currentValue = (isExpanded) ? configuration.size(for: $0) : configuration.visibleArea()
+                    movePanel(value: currentValue + keyboardHeight, keyboard: true)
+                }
             }
         }
     }
 
     @objc private func keyboardWillHide(notification: Notification) {
-        collapsePanel()
+        if isKeyboardOrserverEnabled {
+            collapsePanel()
+        }
     }
 }
 
