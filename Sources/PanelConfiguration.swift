@@ -56,13 +56,13 @@ public struct PanelConfiguration {
         self.panelVisibleArea = visibleArea
     }
 
-    internal func size(for view: UIView) -> CGFloat {
+    func size(for view: UIView) -> CGFloat {
         let delta: CGFloat = (panelSize == .fullScreen) ? 0 : 2
         let size = (self.useSafeArea) ? self.panelSize.translate(for: view, navController: enclosedNavigationBar) + (UIApplication.safeAreaBottom() * delta) : self.panelSize.translate(for: view, navController: enclosedNavigationBar)
         return size
     }
 
-    internal func visibleArea() -> CGFloat {
+    func visibleArea() -> CGFloat {
         let visible = self.panelVisibleArea + UIApplication.safeAreaBottom() + (2 * panelMargin)
         return visible
     }
