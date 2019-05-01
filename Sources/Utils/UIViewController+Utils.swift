@@ -10,14 +10,14 @@ import UIKit
 
 internal extension UIViewController {
 
-    internal func hideKeyboardAutomatically() {
+    func hideKeyboardAutomatically() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self,
                                                                  action: #selector(UIViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }
 
-    @objc internal func dismissKeyboard() {
+    @objc func dismissKeyboard() {
         view.endEditing(true)
     }
 }
