@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 public struct PanelConfiguration {
-
     /// Panel height
     public var panelSize: PanelDimensions
 
@@ -47,23 +46,27 @@ public struct PanelConfiguration {
 
     // Animation duration when the panel is dimissed
     public var dismissAnimationDuration: Double = 0.3
+    
+    /// Observe keyboard events
+    public var keyboardObserver = true
 
     public init(size: PanelDimensions = .thirdQuarter,
                 margin: CGFloat = 8.0,
                 visibleArea: CGFloat = 64.0) {
-        self.panelSize = size
-        self.panelMargin = margin
-        self.panelVisibleArea = visibleArea
+        panelSize = size
+        panelMargin = margin
+        panelVisibleArea = visibleArea
     }
 
     func size(for view: UIView) -> CGFloat {
         let delta: CGFloat = (panelSize == .fullScreen) ? 0 : 2
-        let size = (self.useSafeArea) ? self.panelSize.translate(for: view, navController: enclosedNavigationBar) + (UIApplication.safeAreaBottom() * delta) : self.panelSize.translate(for: view, navController: enclosedNavigationBar)
+        let screenSize = panelSize.translate(for: view, navController: enclosedNavigationBar)
+        let size = useSafeArea ? screenSize + (UIApplication.safeAreaBottom() * delta) : screenSize
         return size
     }
 
-    func visibleArea() -> CGFloat {
-        let visible = self.panelVisibleArea + UIApplication.safeAreaBottom() + (2 * panelMargin)
+    internal func visibleArea() -> CGFloat {
+        let visible = panelVisibleArea + UIApplication.safeAreaBottom() + (panelMargin * 2)
         return visible
     }
 }
